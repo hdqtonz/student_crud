@@ -5,6 +5,7 @@ require("dotenv").config();
 require("./config/db");
 
 const studentRoutes = require("./routes/student.route");
+const CSCRoutes = require("./routes/country-state-city.route");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // routes
 app.use("/", studentRoutes);
+app.use("/", CSCRoutes);
 
 // Creating server
 app.listen(Port, () => {
