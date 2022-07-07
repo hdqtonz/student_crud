@@ -31,6 +31,9 @@ const addStudent = async (req, res) => {
       name: req.body.name,
       roll: req.body.roll,
       address: req.body.address,
+      country: req.body.country,
+      state: req.body.state,
+      city: req.body.city,
       subject: subInfo.map((e) => e._id),
     });
     await student.save();
@@ -139,6 +142,9 @@ const updateStudent = async (req, res) => {
         name: body.name,
         roll: body.roll,
         address: body.address,
+        country: body.country,
+        state: body.state,
+        city: body.city,
         subject: subData.map((e) => e._id),
       },
       { new: true }
