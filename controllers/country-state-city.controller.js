@@ -2,6 +2,7 @@ const Country = require("../models/country.model");
 const State = require("../models/state.model");
 const City = require("../models/city.model");
 
+//----------Get All Country-----------//
 const getAllCountry = async (req, res) => {
   try {
     const countries = await Country.find({});
@@ -10,6 +11,7 @@ const getAllCountry = async (req, res) => {
     res.status(500).send(e);
   }
 };
+//----------Get All State-----------//
 const getAllState = async (req, res) => {
   try {
     if (req.query.country_id) {
@@ -24,6 +26,7 @@ const getAllState = async (req, res) => {
     res.status(500).send(e);
   }
 };
+// ---------Get All City-----------//
 const getAllCity = async (req, res) => {
   let id = req.query.state_id;
   try {

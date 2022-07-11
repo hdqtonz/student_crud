@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const studentController = require("../controllers/student.controller");
+const storage = require("../_helpers/storage");
 
 // Add a student
-router.post("/student", studentController.addStudent);
+router.post("/student", storage, studentController.addStudent);
 // Get all student
 router.get("/student", studentController.getAllStudent);
 // Get one student

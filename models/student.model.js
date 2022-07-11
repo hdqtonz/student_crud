@@ -15,6 +15,9 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  file: {
+    type: String,
+  },
   country: {
     type: String,
     required: true,

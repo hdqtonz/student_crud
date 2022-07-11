@@ -4,6 +4,7 @@ const Subject = require("../models/subject.model");
 
 // --------- Create New Student-----------//
 const addStudent = async (req, res) => {
+  var fileData = req.file;
   try {
     let subInfo = [];
     var sublen = req.body.subject.length;
@@ -27,10 +28,16 @@ const addStudent = async (req, res) => {
 
       subInfo.push(subject);
     }
+    console.log(fileData);
+
     const student = await new Student({
       name: req.body.name,
       roll: req.body.roll,
       address: req.body.address,
+      // file: "http://localhost:3000/files/" + fileData.filename,
+      file: req.body.file
+        ? req.body.file
+        : "http://localhost:3000/files/" + fileData.filename,
       country: req.body.country,
       state: req.body.state,
       city: req.body.city,
