@@ -15,7 +15,7 @@ const app = express();
 const Port = process.env.PORT || 3000;
 
 // middlewares
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cors());
 app.use("/files", express.static(path.join("uploads")));

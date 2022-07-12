@@ -1,10 +1,13 @@
 const Student = require("../models/student.model");
 const Marks = require("../models/marks.model");
 const Subject = require("../models/subject.model");
+fs = require("fs");
 
 // --------- Create New Student-----------//
 const addStudent = async (req, res) => {
-  var fileData = req.file;
+  var fileData = req.files;
+
+  var fils = [];
   try {
     let subInfo = [];
     var sublen = req.body.subject.length;
@@ -28,16 +31,15 @@ const addStudent = async (req, res) => {
 
       subInfo.push(subject);
     }
-    console.log(fileData);
+    fils = fileData.map((file) => {
+      return "http://localhost:3000/files/" + file.filename;
+    });
 
     const student = await new Student({
       name: req.body.name,
       roll: req.body.roll,
       address: req.body.address,
-      // file: "http://localhost:3000/files/" + fileData.filename,
-      file: req.body.file
-        ? req.body.file
-        : "http://localhost:3000/files/" + fileData.filename,
+      file: fils,
       country: req.body.country,
       state: req.body.state,
       city: req.body.city,
@@ -84,7 +86,15 @@ const getStudentById = async (req, res) => {
 // --------- Delete Student By Id-----------//
 const deleteStudent = async (req, res) => {
   try {
+    const Deletstudent = await Student.findById(req.params.id);
+
+    if (Deletstudent.file) {
+      for (let file of Deletstudent.file) {
+        fs.unlinkSync(`uploads/${file.split("/")[4]}`);
+      }
+    }
     const student = await Student.findByIdAndDelete(req.params.id);
+
     res.status(200).send({ success: true, data: student });
   } catch (e) {
     res.status(500).send({ success: false, error: e });
@@ -93,11 +103,22 @@ const deleteStudent = async (req, res) => {
 
 //--------------Update Student----------------//
 const updateStudent = async (req, res) => {
+  var fileData = req.files;
+  var fils = [];
   try {
     const body = req.body;
+
     var subData = [];
     const student = await Student.findById({ _id: req.params.id });
     const subject = await Subject.find({ _id: { $in: student.subject } });
+
+    //*** Delete Old file ***//
+
+    if (student.file) {
+      for (let file of student.file) {
+        fs.unlinkSync(`uploads/${file.split("/")[4]}`);
+      }
+    }
 
     for (let i = 0; i < body.subject.length; i++) {
       if (subject[i] != undefined) {
@@ -142,6 +163,9 @@ const updateStudent = async (req, res) => {
       }
     }
     //student.subject = subData.map((e) => e._id);
+    fils = fileData.map((file) => {
+      return "http://localhost:3000/files/" + file.filename;
+    });
 
     const updateStudent = await Student.findByIdAndUpdate(
       { _id: req.params.id },
@@ -152,6 +176,7 @@ const updateStudent = async (req, res) => {
         country: body.country,
         state: body.state,
         city: body.city,
+        file: fils,
         subject: subData.map((e) => e._id),
       },
       { new: true }

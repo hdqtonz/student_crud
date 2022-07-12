@@ -15,6 +15,6 @@ const diskStorage = multer.diskStorage({
 //   allowedFileType.includes(file.mimetype) ? cb(null, true) : cb(null, false);
 // };
 
-const storage = multer({ storage: diskStorage }).single("file");
+const storage = multer({ storage: diskStorage }).array("file");
 
 module.exports = storage;
